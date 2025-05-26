@@ -3,6 +3,15 @@
 
 # CORE SECTION: All constants in this section are necessary
 
+# The language of the AI
+LANGUAGE = "en" # Options: "en", "zh"
+
+# Speech to Text (STT) model type
+STT_REALTIME_MODEL_TYPE = "tiny.en" # Options: "tiny", "tiny.en", "small", "medium", ...
+
+# Text to Speech (TTS) tokenizer type
+TTS_REALTIME_TOKENIZER = "coqui"  # Options: "coqui", "stanza"
+
 # Microphone/Speaker device indices
 # Use utils/listAudioDevices.py to find the correct device ID
 #UNIQUE#
