@@ -37,7 +37,10 @@ class TTS:
 
         self.signals.sio_queue.put(("current_message", message))
         self.stream.feed(message)
-        self.stream.play_async()
+        self.stream.play_async(
+            tokenizer=TTS_REALTIME_TOKENIZER,
+            language=LANGUAGE,
+        )
 
     def stop(self):
         self.stream.stop()
