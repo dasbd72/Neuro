@@ -79,9 +79,7 @@ async def main():
     # Create threads (As daemons, so they exit when the main thread exits)
     prompter_thread = threading.Thread(target=prompter.prompt_loop, daemon=True)
     stt_thread = threading.Thread(target=stt.listen_loop, daemon=True)
-    sio_thread = threading.Thread(target=sio.start_server, daemon=True)
     # Start Threads
-    sio_thread.start()
     prompter_thread.start()
     stt_thread.start()
 
@@ -91,9 +89,22 @@ async def main():
         module_threads[name] = module_thread
         module_thread.start()
 
+    # Create a task for the Socket.io server in the main asyncio loop
+    sio_task = asyncio.create_task(sio.start_server())
+
     while not signals.terminate:
-        time.sleep(0.1)
+        await asyncio.sleep(0.1) # Use asyncio.sleep instead of time.sleep
+
     print("TERMINATING ======================")
+
+    # Cancel the sio_task if it's still running
+    sio_task.cancel()
+    try:
+        await sio_task
+    except asyncio.CancelledError:
+        print("Socket.io server task cancelled.")
+    except Exception as e:
+        print(f"Error during Socket.io server shutdown: {e}")
 
     # Wait for child threads to exit before exiting main thread
 
@@ -101,8 +112,6 @@ async def main():
     for module_thread in module_threads.values():
         module_thread.join()
 
-    sio_thread.join()
-    print("SIO EXITED ======================")
     prompter_thread.join()
     print("PROMPTER EXITED ======================")
     # stt_thread.join()

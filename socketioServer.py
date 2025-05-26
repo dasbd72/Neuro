@@ -1,7 +1,7 @@
 import time
+import asyncio
 from aiohttp import web
 import socketio
-from aiohttp.web_runner import GracefulExit
 
 from constants import PATIENCE
 
@@ -16,8 +16,9 @@ class SocketIOServer:
         self.llmWrapper = llmWrapper
         self.prompter = prompter
         self.modules = modules
+        self.runner = None # To store the AppRunner for graceful shutdown
 
-    def start_server(self):
+    async def start_server(self):
         print("Starting Socket.io server")
         sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
         app = web.Application()
@@ -219,18 +220,22 @@ class SocketIOServer:
             print('Client disconnected')
 
         async def send_messages():
-            while True:
-                if self.signals.terminate:
-                    raise GracefulExit
-
+            while not self.signals.terminate:
                 while not self.signals.sio_queue.empty():
                     event, data = self.signals.sio_queue.get()
-                    # print(f"Sending {event} with {data}")
                     await sio.emit(event, data)
-                await sio.sleep(0.1)
+                await asyncio.sleep(0.1)
 
-        async def init_app():
-            sio.start_background_task(send_messages)
-            return app
+        # Start the aiohttp server setup
+        self.runner = web.AppRunner(app)
+        await self.runner.setup()
 
-        web.run_app(init_app())
+        # Start the background task to send messages
+        sio.start_background_task(send_messages)
+
+        # Keep the server running until signals.terminate is True
+        while not self.signals.terminate:
+            await asyncio.sleep(1) # Keep the main server loop alive
+
+        # When signals.terminate becomes True, clean up the runner
+        await self.runner.cleanup()
