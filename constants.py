@@ -1,3 +1,5 @@
+import os
+
 # This file holds various constants used in the program
 # Variables marked with #UNIQUE# will be unique to your setup and NEED to be changed or the program will not work correctly.
 
@@ -25,7 +27,7 @@ PATIENCE = 60
 LLM_SERVER = "textgen"  # Options: "textgen", "gemini"
 
 # Gemini API Key if using Gemini as LLM server
-GEMINI_API_KEY = ""
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = "gemini-2.0-flash"
 
 # URL of LLM API Endpoint if using textgen server
