@@ -12,6 +12,7 @@ LANGUAGE = "en" # Options: "en", "zh"
 STT_REALTIME_MODEL_TYPE = "tiny.en" # Options: "tiny", "tiny.en", "small", "medium", ...
 
 # Text to Speech (TTS) tokenizer type
+TTS_MODEL_NAME = "tts_models/multilingual/multi-da"
 TTS_REALTIME_TOKENIZER = "coqui"  # Options: "coqui", "stanza"
 
 # Microphone/Speaker device indices
