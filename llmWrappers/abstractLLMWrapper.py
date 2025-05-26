@@ -4,6 +4,7 @@ import sseclient
 import json
 import time
 from dotenv import load_dotenv
+from openai import OpenAI
 from constants import *
 from modules.injection import Injection
 
@@ -26,6 +27,9 @@ class AbstractLLMWrapper:
 
         #Below constants must be set by child classes
         self.SYSTEM_PROMPT = None
+        self.LLM_SERVER = None
+        self.GEMINI_API_KEY = None
+        self.GEMINI_MODEL = None
         self.LLM_ENDPOINT = None
         self.CONTEXT_SIZE = None
         self.tokenizer = None
@@ -113,20 +117,46 @@ class AbstractLLMWrapper:
 
         data = self.prepare_payload()
 
-        stream_response = requests.post(self.LLM_ENDPOINT + "/v1/chat/completions", headers=self.headers, json=data,
-                                        verify=False, stream=True)
-        response_stream = sseclient.SSEClient(stream_response)
+        if self.LLM_SERVER == "textgen":
+            stream_response = requests.post(self.LLM_ENDPOINT + "/v1/chat/completions", headers=self.headers, json=data,
+                                            verify=False, stream=True)
+            response_stream = sseclient.SSEClient(stream_response)
 
-        AI_message = ''
-        for event in response_stream.events():
-            # Check to see if next message was canceled
-            if self.llmState.next_cancelled:
-                continue
+            AI_message = ''
+            for event in response_stream.events():
+                # Check to see if next message was canceled
+                if self.llmState.next_cancelled:
+                    continue
 
-            payload = json.loads(event.data)
-            chunk = payload['choices'][0]['delta']['content']
-            AI_message += chunk
-            self.signals.sio_queue.put(("next_chunk", chunk))
+                payload = json.loads(event.data)
+                chunk = payload['choices'][0]['delta']['content']
+                AI_message += chunk
+                self.signals.sio_queue.put(("next_chunk", chunk))
+        elif self.LLM_SERVER == "gemini":
+            client = OpenAI(
+                api_key=self.GEMINI_API_KEY,
+                base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+            )
+            response = client.chat.completions.create(
+                model=self.GEMINI_MODEL,
+                stream=True,
+                messages=data.get('messages', []),
+                max_tokens=data.get('max_tokens', None),
+                stop=data.get('stop', None),
+            )
+
+            AI_message = ''
+            for chunk in response:
+                # Check to see if next message was cancelled
+                if self.llmState.next_cancelled:
+                    continue
+                # Check if chunk is empty
+                if chunk.choices[0].delta.content is None:
+                    continue
+                AI_message += chunk.choices[0].delta.content
+                self.signals.sio_queue.put(("next_chunk", chunk.choices[0].delta.content))
+        else:
+            raise ValueError("Unsupported LLM server type: " + self.LLM_SERVER)
 
         if self.llmState.next_cancelled:
             self.llmState.next_cancelled = False
@@ -175,4 +205,5 @@ class AbstractLLMWrapper:
         def cancel_next(self):
             self.outer.llmState.next_cancelled = True
             # For text-generation-webui: Immediately stop generation
-            requests.post(self.outer.LLM_ENDPOINT + "/v1/internal/stop-generation", headers={"Content-Type": "application/json"})
+            if self.outer.LLM_SERVER == "textgen":
+                requests.post(self.outer.LLM_ENDPOINT + "/v1/internal/stop-generation", headers={"Content-Type": "application/json"})

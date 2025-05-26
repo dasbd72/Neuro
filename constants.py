@@ -12,7 +12,14 @@ OUTPUT_DEVICE_INDEX = 7
 # How many seconds to wait before prompting AI
 PATIENCE = 60
 
-# URL of LLM API Endpoint
+# LLM server type
+LLM_SERVER = "textgen"  # Options: "textgen", "gemini"
+
+# Gemini API Key if using Gemini as LLM server
+GEMINI_API_KEY = ""
+GEMINI_MODEL = "gemini-2.0-flash"
+
+# URL of LLM API Endpoint if using textgen server
 # LLM_ENDPOINT = ""
 LLM_ENDPOINT = "http://127.0.0.1:5000"
 

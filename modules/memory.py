@@ -1,3 +1,4 @@
+from openai import OpenAI
 from modules.module import Module
 from constants import *
 from chromadb.config import Settings
@@ -81,7 +82,7 @@ class Memory(Module):
                     "max_tokens": 200,
                     "skip_special_tokens": False,  # Necessary for Llama 3
                     "custom_token_bans": BANNED_TOKENS,
-                    "stop": STOP_STRINGS.remove("\n"),
+                    "stop": [string for string in STOP_STRINGS if string != "\n"],
                     "messages": [{
                         "role": "user",
                         "content": chat_section + MEMORY_PROMPT
@@ -89,8 +90,21 @@ class Memory(Module):
                 }
                 headers = {"Content-Type": "application/json"}
 
-                response = requests.post(LLM_ENDPOINT + "/v1/chat/completions", headers=headers, json=data, verify=False)
-                raw_memories = response.json()['choices'][0]['message']['content']
+                if LLM_SERVER == "textgen":
+                    response = requests.post(LLM_ENDPOINT + "/v1/chat/completions", headers=headers, json=data, verify=False)
+                    raw_memories = response.json()['choices'][0]['message']['content']
+                elif LLM_SERVER == "gemini":
+                    client = OpenAI(api_key=GEMINI_API_KEY, base_url="https://generativelanguage.googleapis.com/v1beta/openai/")
+                    response = client.chat.completions.create(
+                        model=GEMINI_MODEL,
+                        stream=False,
+                        messages=data.get('messages', []),
+                        max_tokens=data.get('max_tokens', None),
+                        stop=data.get('stop', None),
+                    )
+                    raw_memories = response.choices[0].message.content
+                else:
+                    raise ValueError("Unsupported LLM server type: " + LLM_SERVER)
 
                 # Split each Q&A section and add the new memory to the database
                 for memory in raw_memories.split("{qa}"):
