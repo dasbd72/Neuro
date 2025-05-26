@@ -16,6 +16,29 @@ class STT:
             return
 
         print("STT OUTPUT: " + text)
+        if WAKE_PROMPTS:
+            is_waking = False
+            if LANGUAGE == "en":
+                # Check if the text start with wake prompts
+                for wake_prompt in WAKE_PROMPTS:
+                    if text.startswith(wake_prompt):
+                        is_waking = True
+                        text = text.lstrip(wake_prompt)
+                        break
+            elif LANGUAGE == "zh":
+                import pypinyin
+                text_seq = pypinyin.lazy_pinyin(text)
+                wake_seqs = [pypinyin.lazy_pinyin(word) for word in WAKE_PROMPTS]
+                # Check if the text start with wake prompts
+                for wake_seq in wake_seqs:
+                    if text_seq[:len(wake_seq)] == wake_seq:
+                        is_waking = True
+                        text = text[len(wake_seq):]
+                        break
+            if not is_waking:
+                # If the text does not contain the wake prompt, ignore it
+                print("STT: Ignoring text without wake prompt")
+                return
         self.signals.history.append({"role": "user", "content": text})
 
         self.signals.last_message_time = time.time()
