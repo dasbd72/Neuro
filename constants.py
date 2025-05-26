@@ -96,6 +96,9 @@ Chat: Hi Luna!
 Luna: Let's get this stream started!
 '''
 
+# Wake up prompt
+WAKE_PROMPTS = []
+
 # List of banned tokens to be passed to the textgen web ui api
 # For Mistral 7B v0.2, token 422 is the "#" token. The LLM was spamming #life #vtuber #funfact etc.
 BANNED_TOKENS = ""
