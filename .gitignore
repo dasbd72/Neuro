@@ -9,3 +9,4 @@ realtimesst.log
 vtubeStudio_token.txt
 memories.json
 chroma.db/
+cuda-repo*

@@ -41,7 +41,6 @@ cymem==2.0.8
 Cython==3.0.11
 dateparser==1.1.8
 decorator==5.1.1
-deepspeed @ file:///Z:/neurobackend/deepspeed-0.14.0%2Bcu118-cp311-cp311-win_amd64.whl#sha256=eaa116f7055faa15938217a75866809309092b4604c946fb2ceff8d880d9a8db
 Deprecated==1.2.14
 distro==1.9.0
 docopt==0.6.2
@@ -159,7 +158,6 @@ pynndescent==0.5.13
 pynvml==11.5.3
 pyparsing==3.2.0
 PyPika==0.48.9
-pypiwin32==223
 pyproject_hooks==1.2.0
 pyreadline3==3.5.4
 pysbd==0.3.4
@@ -171,7 +169,6 @@ python-socketio==5.11.4
 pyttsx3==2.90
 pytz==2024.2
 pyvts==0.3.3
-pywin32==308
 PyYAML==6.0.2
 RealtimeSTT==0.3.7
 RealTimeTTS==0.4.1

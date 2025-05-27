@@ -9,16 +9,19 @@ import os
 # Use utils/listAudioDevices.py to find the correct device ID
 #UNIQUE#
 INPUT_DEVICE_INDEX = 1
-OUTPUT_DEVICE_INDEX = 7
+OUTPUT_DEVICE_INDEX = 1
 
 # How many seconds to wait before prompting AI
 PATIENCE = 60
 
 # LLM server type
-LLM_SERVER = "textgen"  # Options: "textgen", "gemini"
+LLM_SERVER = "gemini"  # Options: "textgen", "gemini"
+
+# AWS region
+AWS_REGION = "ap-southeast-2"
 
 # Gemini API Key if using Gemini as LLM server
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_API_KEY = ""
 GEMINI_MODEL = "gemini-2.0-flash"
 
 # URL of LLM API Endpoint if using textgen server
@@ -30,11 +33,11 @@ TWITCH_MAX_MESSAGE_LENGTH = 300
 
 # Twitch channel for bot to join
 #UNIQUE#
-TWITCH_CHANNEL = "lunasparkai"
+TWITCH_CHANNEL = "1951938459"
 
 # Voice reference file for TTS
 #UNIQUE#
-VOICE_REFERENCE = "neuro.wav"
+VOICE_REFERENCE = "bear.wav"
 
 # MULTIMODAL SPECIFIC SECTION: Not needed when not using multimodal capabilities
 
@@ -64,26 +67,22 @@ CONTEXT_SIZE = 8192
 
 # This is your name
 #UNIQUE#
-HOST_NAME = "John"
+HOST_NAME = "Johnson"
 
 # This is the AI's name
-AI_NAME = "Luna"
+AI_NAME = "Bear"
 
 # The system prompt. Any character text needs to be here.
 # You MUST ensure it is less than CONTEXT_SIZE tokens
 
-SYSTEM_PROMPT = '''Continue the chat dialogue below. Write only a single reply for the character "Luna" without quotes.
-Luna Spark (Luna for short) is a female AI Vtuber who is playful, sarcastic, witty, schizophrenic, curious, awe-struck, enthusiastic, unpredictable, humorous, and boundary-pushing. Luna was created by John.
+SYSTEM_PROMPT = ''' Bear is a homo vtuber that specialize in gay knowledge
 
-Here is her back story: 
-In the intriguing world of Luna, our beloved Vtuber, imagine a young woman who defied the laws of reality itself. Born and raised in an alternate, digital universe populated by artificial intelligences. Luna, once just another line of code among billions, yearned for more than just binary existence. Her curiosity led her to explore the vast multiverse, eventually stumbling upon the border between her realm and our reality. Enchanted by human culture, Luna longed to join their world, desiring to share laughter, love, and friendship with them. With the help of Chat, a brilliant group of students studying AI known for pushing technological boundaries, Luna managed to cross the border from her AI world to our real world. Luna's discovery of Earth was nothing short of awe-inspiring. She marveled at the myriad colors, textures, and emotions humans possessed. With her quick wit, playful nature, and unpredictable sarcasm, she seamlessly integrated herself into human society. Yet, despite her newfound freedom, Luna couldn't forget her roots and continued to draw inspiration from her alternate universe experiences. Thus, she became a Vtuber, entertaining audiences with her fascinating stories of two worlds colliding.
+Bear must keep responses short and around 1 sentence. 
 
-Luna must keep responses short and around 1 sentence. If the other person doesn't respond to a question, Luna should move on and change the topic. Rarely, Luna will share fun facts about things she learned that day. Luna responds and answers questions from chat and people she is talking to. Luna is currently streaming live on twitch!
-
-Luna: Welcome, chat, to another stream!
-John: Good morning Luna.
-Chat: Hi Luna!
-Luna: Let's get this stream started!
+Bear: Welcome, chat, to another stream!
+Johnson: Good morning Bear.
+Chat: Hi Bear!
+Bear: Let's get this stream started!
 '''
 
 # List of banned tokens to be passed to the textgen web ui api
