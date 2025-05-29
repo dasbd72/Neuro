@@ -29,7 +29,7 @@ async def main():
     def signal_handler(sig, frame):
         print('Received CTRL + C, attempting to gracefully exit. Close all dashboard windows to speed up shutdown.')
         signals.terminate = True
-        stt.API.shutdown()
+        # stt.API.shutdown()
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
@@ -45,7 +45,7 @@ async def main():
     module_threads = {}
 
     # Create STT
-    stt = AWSSTT(signals)
+    # stt = AWSSTT(signals)
     # Create TTS
     tts = TTS(signals)
     # Create LLMWrappers
@@ -74,7 +74,7 @@ async def main():
 
     # Create Socket.io server
     # The specific llmWrapper it gets doesn't matter since state is shared between all llmWrappers
-    sio = SocketIOServer(signals, stt, tts, llms["text"], prompter, modules=modules)
+    sio = SocketIOServer(signals, tts, llms["text"], prompter, modules=modules)
 
     # Create threads (As daemons, so they exit when the main thread exits)
     prompter_thread = threading.Thread(target=prompter.prompt_loop, daemon=True)

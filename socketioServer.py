@@ -7,11 +7,11 @@ from constants import PATIENCE
 
 
 class SocketIOServer:
-    def __init__(self, signals, stt, tts, llmWrapper, prompter, modules=None):
+    def __init__(self, signals, tts, llmWrapper, prompter, modules=None):
         if modules is None:
             modules = {}
         self.signals = signals
-        self.stt = stt
+        # self.stt = stt
         self.tts = tts
         self.llmWrapper = llmWrapper
         self.prompter = prompter
@@ -73,13 +73,13 @@ class SocketIOServer:
         async def enable_TTS(sid):
             self.tts.API.set_TTS_status(True)
 
-        @sio.event
-        async def disable_STT(sid):
-            self.stt.API.set_STT_status(False)
+        # @sio.event
+        # async def disable_STT(sid):
+        #     self.stt.API.set_STT_status(False)
 
-        @sio.event
-        async def enable_STT(sid):
-            self.stt.API.set_STT_status(True)
+        # @sio.event
+        # async def enable_STT(sid):
+        #     self.stt.API.set_STT_status(True)
 
         @sio.event
         async def disable_movement(sid):
@@ -238,7 +238,7 @@ class SocketIOServer:
             # Collect the enabled status of the llm, tts, stt, and movement and send it to the client
             await sio.emit('LLM_status', self.llmWrapper.API.get_LLM_status())
             await sio.emit('TTS_status', self.tts.API.get_TTS_status())
-            await sio.emit('STT_status', self.stt.API.get_STT_status())
+            # await sio.emit('STT_status', self.stt.API.get_STT_status())
 
         @sio.event
         def disconnect(sid):
