@@ -18,11 +18,36 @@ class SocketIOServer:
         self.modules = modules
         self.runner = None # To store the AppRunner for graceful shutdown
 
-    async def start_server(self):
+    async def start_server(self, host='0.0.0.0', port=6969): # MODIFIED
         print("Starting Socket.io server")
+        print(f"Starting Socket.io server on {host}:{port}") # MODIFIED
         sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
         app = web.Application()
         sio.attach(app)
+
+        async def handle_http_message(request: web.Request): # Renamed for clarity, but can keep old name
+            try:
+                # For POST requests, data is usually in the body.
+                # request.post() handles URL-encoded form data.
+                post_data = await request.post()
+                message_text = post_data.get('text', None)
+
+                client_ip = request.remote or "unknown_ip"
+                print(f"Received HTTP POST request from {client_ip} with form data: {post_data}")
+
+                if message_text and message_text.strip():
+                    print(f"Processing HTTP POST message: '{message_text}' for prompter.")
+                    self.signals.history.append({"role": "user", "content": message_text})
+                    self.signals.new_message = True
+                    return web.Response(text=f"Message '{message_text}' (POST) received and queued.", status=200)
+                else:
+                    return web.Response(text="Error: 'text' field missing or empty in POST data.", status=400)
+            except Exception as e:
+                print(f"Error handling HTTP POST message: {e}")
+                return web.Response(text=f"Internal server error: {e}", status=500)
+
+        # Add the route to the aiohttp application
+        app.router.add_post('/http_message', handle_http_message)
 
         @sio.event
         async def get_blacklist(sid):
@@ -229,6 +254,12 @@ class SocketIOServer:
         # Start the aiohttp server setup
         self.runner = web.AppRunner(app)
         await self.runner.setup()
+
+        # --- THIS IS THE CRUCIAL ADDITION ---
+        self.site = web.TCPSite(self.runner, host, port)
+        await self.site.start()
+        print(f"Socket.IO and HTTP server is now listening on http://{host}:{port}")
+        # --- END OF CRUCIAL ADDITION ---
 
         # Start the background task to send messages
         sio.start_background_task(send_messages)

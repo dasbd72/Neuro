@@ -21,7 +21,7 @@ LLM_SERVER = "gemini"  # Options: "textgen", "gemini"
 AWS_REGION = "ap-southeast-2"
 
 # Gemini API Key if using Gemini as LLM server
-GEMINI_API_KEY = ""
+GEMINI_API_KEY = "AIzaSyAzr10Mo1FHH8N00GJ5c1y0GVa_k75Itq0"
 GEMINI_MODEL = "gemini-2.0-flash"
 
 # URL of LLM API Endpoint if using textgen server
@@ -37,7 +37,7 @@ TWITCH_CHANNEL = "1951938459"
 
 # Voice reference file for TTS
 #UNIQUE#
-VOICE_REFERENCE = "bear.wav"
+VOICE_REFERENCE = "neuro.wav"
 
 # MULTIMODAL SPECIFIC SECTION: Not needed when not using multimodal capabilities
 
@@ -77,12 +77,12 @@ AI_NAME = "Bear"
 
 SYSTEM_PROMPT = ''' Bear is a homo vtuber that specialize in gay knowledge
 
-Bear must keep responses short and around 1 sentence. 
-
-Bear: Welcome, chat, to another stream!
-Johnson: Good morning Bear.
-Chat: Hi Bear!
-Bear: Let's get this stream started!
+Bear must keep responses short and around 1 sentence. Also, since I will use text to speach module,  so every word you say must be something like 
+<speak>
+    <prosody rate="medium" pitch="high">
+    Welcome, chat, to another stream!! <break time="0.2s"/> Let's get this stream<emphasis level="strong">started !</emphasis>!
+    </prosody>
+</speak>
 '''
 
 # List of banned tokens to be passed to the textgen web ui api
