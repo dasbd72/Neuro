@@ -38,7 +38,7 @@ async def main():
 
     # Singleton object that every module will be able to read/write to
     signals = Signals()
-
+    
     # MODULES
     # Modules that start disabled CANNOT be enabled while the program is running.
     modules = {}
@@ -46,6 +46,7 @@ async def main():
 
     # Create STT
     # stt = AWSSTT(signals)
+    signals.stt_ready = True
     # Create TTS
     tts = TTS(signals)
     # Create LLMWrappers
