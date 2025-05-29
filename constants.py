@@ -21,7 +21,7 @@ LLM_SERVER = "gemini"  # Options: "textgen", "gemini"
 AWS_REGION = "ap-southeast-2"
 
 # Gemini API Key if using Gemini as LLM server
-GEMINI_API_KEY = "AIzaSyAzr10Mo1FHH8N00GJ5c1y0GVa_k75Itq0"
+GEMINI_API_KEY = ""
 GEMINI_MODEL = "gemini-2.0-flash"
 
 # URL of LLM API Endpoint if using textgen server
@@ -30,6 +30,9 @@ LLM_ENDPOINT = "http://127.0.0.1:5000"
 
 # Twitch chat messages above this length will be ignored
 TWITCH_MAX_MESSAGE_LENGTH = 300
+
+# Windows Desktop URL
+SERVER_URL = "http://10.243.109.158:6969/http_message"
 
 # Twitch channel for bot to join
 #UNIQUE#

@@ -11,7 +11,7 @@ from prompter import Prompter
 from llmWrappers.llmState import LLMState
 from llmWrappers.textLLMWrapper import TextLLMWrapper
 from llmWrappers.imageLLMWrapper import ImageLLMWrapper
-from awsstt import AWSSTT
+from iotstt import AWSSTT
 from tts import TTS
 from modules.twitchClient import TwitchClient
 from modules.audioPlayer import AudioPlayer
@@ -78,10 +78,10 @@ async def main():
 
     # Create threads (As daemons, so they exit when the main thread exits)
     prompter_thread = threading.Thread(target=prompter.prompt_loop, daemon=True)
-    stt_thread = threading.Thread(target=stt._run_transcription_sync, daemon=True)
+    # stt_thread = threading.Thread(target=stt._run_transcription_sync, daemon=True)
     # Start Threads
     prompter_thread.start()
-    stt_thread.start()
+    # stt_thread.start()
 
     # Create and start threads for modules
     for name, module in modules.items():
