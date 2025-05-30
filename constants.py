@@ -8,6 +8,13 @@ import os
 # The language of the AI
 LANGUAGE = "en" # Options: "en", "zh"
 
+# Speech to Text (STT) server type
+STT_SERVER = "local" # Options: "local", "aws"
+
+# Speech to Text (STT) AWS configurations
+STT_AWS_REGION = "us-east-1"  # Options: "us-east-1", "ap-southeast-2", etc.
+STT_AWS_LANGUAGE = "en-US" # Options: "en-US", "zh-CN", etc.
+
 # Speech to Text (STT) model type
 STT_REALTIME_MODEL_TYPE = "tiny.en" # Options: "tiny", "tiny.en", "small", "medium", ...
 
