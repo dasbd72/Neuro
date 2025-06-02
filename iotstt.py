@@ -117,6 +117,7 @@ class AWSSTT:
                             # send message to PC here
                             payload = {
                                 'text': transcript 
+                                #'user': 
                             }
                             response = requests.post(SERVER_URL, data=payload, timeout=10)
                             
