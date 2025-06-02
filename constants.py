@@ -18,6 +18,12 @@ STT_AWS_LANGUAGE = "en-US" # Options: "en-US", "zh-CN", etc.
 # Speech to Text (STT) model type
 STT_REALTIME_MODEL_TYPE = "tiny.en" # Options: "tiny", "tiny.en", "small", "medium", ...
 
+# Text to Speech (TTS) server type
+TTS_SERVER = "local"  # Options: "local", "google"
+
+# Text to Speech (TTS) Google configurations
+TTS_GOOGLE_VOICE_NAME = "en-US-Wavenet-D" # Options: "en-US-Wavenet-A", "cmn-TW-Standard-A", "cmn-CN-Chirp3-HD-Despina", ...
+
 # Text to Speech (TTS) tokenizer type
 TTS_MODEL_NAME = "tts_models/multilingual/multi-da"
 TTS_REALTIME_TOKENIZER = "nltk" # Options: "nltk", "stanza"
