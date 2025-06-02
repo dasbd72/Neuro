@@ -1,0 +1,9 @@
+{
+    "python.languageServer": "Pylance",
+
+    "python.analysis.useLibraryCodeForTypes": true,
+
+    "python.analysis.packageIndexDepths": {
+        "*": 3
+    }
+}

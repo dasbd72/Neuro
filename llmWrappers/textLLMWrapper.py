@@ -18,6 +18,8 @@ class TextLLMWrapper(AbstractLLMWrapper):
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL, token=os.getenv("HF_TOKEN"))
 
     def prepare_payload(self):
+        # find the leetcode data
+        # camera picture
         return {
             "mode": "instruct",
             "stream": True,

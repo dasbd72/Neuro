@@ -45,10 +45,9 @@ class Memory(Module):
 
         # Generate injection for LLM prompt
 
-        self.prompt_injection.text = f"{AI_NAME} knows these things:\n"
-        for i in range(len(memories["ids"][0])):
-            self.prompt_injection.text += memories['documents'][0][i] + "\n"
-        self.prompt_injection.text += "End of knowledge section\n"
+        self.prompt_injection.text = f"下面是他們的聊天紀錄:\n"
+        # for i in range(len(memories["ids"][0])):
+        #     self.prompt_injection.text += memories['documents'][0][i] + "\n"
 
         return self.prompt_injection
 

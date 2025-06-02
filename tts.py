@@ -11,14 +11,18 @@ class TTS:
         self.enabled = True
 
         engine = CoquiEngine(
+            model_name="tts_models/multilingual/multi-da",
             use_deepspeed=True,
             voice="./voices/" + VOICE_REFERENCE,
             speed=1.1,
+            language="zh",
         )
         tts_config = {
             'on_audio_stream_start': self.audio_started,
             'on_audio_stream_stop': self.audio_ended,
             'output_device_index': OUTPUT_DEVICE_INDEX,
+            'language': "zh",
+            # 'tokenizer': "coqui"
         }
         self.stream = TextToAudioStream(engine, **tts_config)
         self.signals.tts_ready = True
