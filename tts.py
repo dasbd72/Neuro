@@ -11,7 +11,7 @@ class TTS:
         self.enabled = True
 
         engine = CoquiEngine(
-            model_name="tts_models/multilingual/multi-da",
+            model_name="IndexTeam/Index-TTS",
             use_deepspeed=True,
             voice="./voices/" + VOICE_REFERENCE,
             speed=1.1,
